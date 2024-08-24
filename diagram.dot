@@ -1,0 +1,9 @@
+digraph DFA {
+    start [shape=point];
+    s0 [shape=circle];
+    s1 [shape=doublecircle];
+
+    start -> s0;
+    s0 -> s1 [label="5"];
+    s1 -> s1 [label="a-z, A-Z"];
+}
