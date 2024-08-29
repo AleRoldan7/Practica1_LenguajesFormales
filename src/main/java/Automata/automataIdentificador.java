@@ -1,15 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Automata;
 
 import Interfaz.cuadriculaInicio;
 import java.awt.BorderLayout;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,8 +21,10 @@ import javax.swing.SwingUtilities;
  * @author alejandro
  */
 public class automataIdentificador {
-    
+
     private cuadriculaInicio cuInicio;
+
+  
     
     public void generarAuto(String cadena){
          // Crear la representación DOT en función de la cadena
@@ -84,5 +84,6 @@ public class automataIdentificador {
             frame.setVisible(true);
         });
     }
+
 
 }
