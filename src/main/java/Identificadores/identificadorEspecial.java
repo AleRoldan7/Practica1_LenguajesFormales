@@ -12,5 +12,25 @@ import java.awt.Color;
  */
 public class identificadorEspecial {
     
+    private String tEspecial [] = {"Square.Color"};
+    private char numeral [] = {'#'};
+            
+            
+    public String validarCadena(String cadena) {
+        if (cadena == null || cadena.isEmpty()) {
+            return "Cadena inválida: La cadena está vacía.";
+        }
+
+
+        return "Cadena válida: " + cadena;
+    }
+    
+    
+    public void agregarColor(String color){
+        
+        
+        
+    }
+    
     
 }

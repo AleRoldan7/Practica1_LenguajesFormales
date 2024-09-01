@@ -1,12 +1,13 @@
-/home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Interfaz/graficoAutomata.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Reportes/reporteTokens.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/ListaTokens/SepararTokens.java
+/home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Automata/Automata.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Automata/celdaToken.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Interfaz/cuadriculaInicio.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Identificadores/generadorComentario.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Identificadores/generadorComparacion.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Identificadores/generadorAritmeticos.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Identificadores/generadorLogico.java
+/home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Automata/automataAritmetico.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Reportes/reportePanel.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Identificadores/generadorTiposDato.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Automata/automataIdentificador.java

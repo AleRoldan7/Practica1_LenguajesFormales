@@ -21,6 +21,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -43,6 +45,7 @@ public class celdaToken extends JPanel{
     private int columnaTexto;
     private int filaCuadricula;
     private int columnaCuadricula;
+    private automataIdentificador autIdentificador = new automataIdentificador();
     private generadorIdentificadores geneIdentificadores = new generadorIdentificadores();
     private generadorAritmeticos geneAritmeticos = new generadorAritmeticos();
     private generadorComparacion geneComparacion = new generadorComparacion();
@@ -52,7 +55,8 @@ public class celdaToken extends JPanel{
     private generadorTiposDato geneDato = new generadorTiposDato();
     private generadorSignos geneSignos = new generadorSignos();
     private generadorComentario geneComentario = new generadorComentario();
-   
+    private  List<String> tokens = new ArrayList<>();
+    
     public celdaToken(String token, Color color, int filaTexto, int columnaTexto, int filaCuadricula, int columnaCuadricula) {
         this.token = token;
         this.color = color;
@@ -67,6 +71,7 @@ public class celdaToken extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 //mostrarInformacion();
                 automataIdentificador(token);
+               
             }
         });
     }
@@ -97,28 +102,10 @@ public class celdaToken extends JPanel{
     }
 
     private void automataIdentificador(String token){
-        // Generar la imagen del autómata
-        automataIdentificador generator = new automataIdentificador();
-        generator.generarAuto(token);
+       
+       autIdentificador.generarAuto(token, token);
 
-        // Mostrar la imagen en una ventana emergente
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Automata para " + token);
-            frame.setSize(800, 600);
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setLocationRelativeTo(null);
-
-            try {
-                File imgFile = new File("automata_" + token + ".png");
-                Image img = ImageIO.read(imgFile);
-                JLabel imgLabel = new JLabel(new ImageIcon(img));
-                frame.add(imgLabel, BorderLayout.CENTER);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            frame.setVisible(true);
-        });
+        
     }
     
     
@@ -175,6 +162,15 @@ public class celdaToken extends JPanel{
         return geneComentario.esComentario(token);
     }
 
+    public String getToken() {
+        return token;
+    }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+    
+    
+    
 
 }

@@ -233,6 +233,7 @@ public class cuadriculaInicio extends JFrame {
 
         int cuadrosTotales = tamaGrid * tamaGrid;
         int tokenIndex = 0;
+        List<String> tokensPintados = new ArrayList<>(); // Lista para almacenar tokens ya pintados
 
         for (int i = 0; i < cuadrosTotales; i++) {
             String token = tokenIndex < tokens.length ? tokens[tokenIndex] : null;
@@ -258,17 +259,26 @@ public class cuadriculaInicio extends JFrame {
         if (esTipoDato(token)) return geneDato.obtenerColorTipo(token);
         if (esSigno(token)) return geneSignos.colorSigno(token);
         if (esComentario(token)) return geneComentario.comentarioColor(token);
-        return geneIdentificadores.obtenerColorParaCadena(token);
+        else{
+            return geneIdentificadores.obtenerColorParaCadena(token);
+        }
+        /*
+        else{
+            JOptionPane.showMessageDialog(cuadriculaInicio.this, "Token no valido", "Error", JOptionPane.ERROR_MESSAGE);
+ 
+        }
+        */
+       
     }
 
-    // Implementar métodos para obtener la fila y columna del token en el texto
+   
     private int obtenerFilaTexto(String token) {
-        // Implementar la lógica para obtener la fila del token en el texto
+        
         return 1;
     }
 
     private int obtenerColumnaTexto(String token) {
-        // Implementar la lógica para obtener la columna del token en el texto
+        
         return 1;
     }
 
@@ -328,6 +338,82 @@ public class cuadriculaInicio extends JFrame {
     }
     
     
+    
+    
+    
+    /*
+    public String[] separarTokens(String texto) {
+        int tamaCadena = texto.length();
+        List<String> tokens = new ArrayList<>();
+        StringBuilder tokenBuilder = new StringBuilder();
+        boolean dentroDeNumero = false;  // Bandera para controlar cuando estamos dentro de un número
+
+        for (int i = 0; i < tamaCadena; i++) {
+            char c = texto.charAt(i);
+
+            if (Character.isWhitespace(c)) {
+                // Cuando se encuentra un espacio, agregar el token si existe
+                if (tokenBuilder.length() > 0) {
+                    tokens.add(tokenBuilder.toString());
+                    tokenBuilder.setLength(0);
+                    dentroDeNumero = false;
+                }
+            } else if (esDelimitador(c)) {
+                // Agregar el token acumulado antes del delimitador
+                if (tokenBuilder.length() > 0) {
+                    tokens.add(tokenBuilder.toString());
+                    tokenBuilder.setLength(0);
+                    dentroDeNumero = false;
+                }
+                // Verificar si es un punto y si estamos en un número
+                if (c == '.' && dentroDeNumero && i + 1 < tamaCadena && Character.isDigit(texto.charAt(i + 1))) {
+                    // Si es un punto decimal y hay un dígito después, continuar acumulando el número
+                    tokenBuilder.append(c);
+                } else {
+                    // Agregar el delimitador como token
+                    tokens.add(String.valueOf(c));
+                }
+            } else {
+                // Acumular caracteres para un token, puede ser parte de un identificador o número
+                tokenBuilder.append(c);
+
+                // Verificar si estamos construyendo un número
+                if (Character.isDigit(c) || (c == '.' && dentroDeNumero)) {
+                    dentroDeNumero = true; // Estamos dentro de un número
+                }
+
+                // Verificar si el siguiente carácter no es parte de un número o identificador
+                if (i + 1 >= tamaCadena || esDelimitador(texto.charAt(i + 1)) || Character.isWhitespace(texto.charAt(i + 1))) {
+                    // Agregar el token acumulado hasta ahora
+                    tokens.add(tokenBuilder.toString());
+                    tokenBuilder.setLength(0);
+                    dentroDeNumero = false;  // Reiniciar bandera después de completar un token
+                }
+            }
+        }
+
+        // Añadir el último token si existe
+        if (tokenBuilder.length() > 0) {
+            tokens.add(tokenBuilder.toString());
+        }
+
+        return tokens.toArray(new String[0]);
+    }
+
+    private boolean esDelimitador(char c) {
+        // Ajustar esta lógica para que los delimitadores sean los que definas como tales
+        return !(Character.isLetter(c) || Character.isDigit(c) || c == '_') 
+               && (esSigno(String.valueOf(c)) || esAritmetico(String.valueOf(c))
+               || esComparacion(String.valueOf(c)) || esLogico(String.valueOf(c)) || esAsignacion(String.valueOf(c)))
+               && c != '.';  // Excluir el punto como delimitador, lo manejaremos manualmente
+    }
+    */
+
+    
+    
+    
+    
+    
     public String[] separarTokens(String texto) {
         int tamaCadena = texto.length();
         List<String> tokens = new ArrayList<>();
@@ -357,6 +443,5 @@ public class cuadriculaInicio extends JFrame {
         return tokens.toArray(new String[0]);
     }
     
- 
 
 }

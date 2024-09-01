@@ -1,4 +1,5 @@
 ListaTokens/NodoTokens.class
+Automata/automataAritmetico.class
 Reportes/reporteTokens.class
 ListaTokens/ListaTokens.class
 Automata/automataIdentificador.class
@@ -10,7 +11,7 @@ Automata/informaToken.class
 Identificadores/identificadorEspecial.class
 Reportes/reportePanel.class
 Interfaz/cuadriculaInicio$CargarArchivoPanel.class
-Interfaz/graficoAutomata.class
+Automata/Automata.class
 Interfaz/cuadriculaInicio$1.class
 Identificadores/generadorComentario.class
 ListaTokens/SepararTokens.class

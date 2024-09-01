@@ -6,6 +6,7 @@ package Inicio;
 
 import Identificadores.generadorIdentificadores;
 import Identificadores.generadorTiposDato;
+import Identificadores.identificadorEspecial;
 import Interfaz.cuadriculaInicio;
 import java.util.Scanner;
 

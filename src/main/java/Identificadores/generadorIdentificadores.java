@@ -61,6 +61,27 @@ public class generadorIdentificadores {
         }
         return false;
     }
+    
+     // Nuevo método para verificar identificadores alfanuméricos válidos
+    public boolean esIdentificadorValido(String cadena) {
+        if (cadena == null || cadena.isEmpty()) {
+            return false;
+        }
+
+        char primerCaracter = cadena.charAt(0);
+        if (!esLetra(primerCaracter)) {
+            return false;
+        }
+
+        for (int i = 1; i < cadena.length(); i++) {
+            char c = cadena.charAt(i);
+            if (!esLetra(c) && !esNumero(c) && c != subra) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     
 }

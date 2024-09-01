@@ -24,24 +24,23 @@ public class automataIdentificador {
 
     private cuadriculaInicio cuInicio;
 
-  
-    
-    public void generarAuto(String cadena){
-         // Crear la representación DOT en función de la cadena
+    public void generarAuto(String token, String tipoToken) {
+        // Crear la representación DOT en función del token
         StringBuilder dotFileContent = new StringBuilder();
         dotFileContent.append("digraph DFA {\n");
+        dotFileContent.append("    label=\"Tipo de Token: ").append(tipoToken).append("\";\n");
+        dotFileContent.append("    labelloc=\"t\";\n"); // Posición del título en la parte superior
         dotFileContent.append("    start [shape=point];\n");
-        dotFileContent.append("    s0 [shape=circle];\n");
-        dotFileContent.append("    s1 [shape=doublecircle];\n");
-        dotFileContent.append("\n");
-        dotFileContent.append("    start -> s0;\n");
 
-        // Aquí puedes ajustar las transiciones en función de la cadena
-        for (char c : cadena.toCharArray()) {
-            dotFileContent.append("    s0 -> s1 [label=\"").append(c).append("\"];\n");
+        String nodoAnterior = "start";
+        for (int i = 0; i < token.length(); i++) {
+            String nodoActual = "s" + i;
+            char c = token.charAt(i);
+            dotFileContent.append("    ").append(nodoAnterior).append(" -> ").append(nodoActual).append(" [label=\"").append(c).append("\"];\n");
+            dotFileContent.append("    ").append(nodoActual).append(" [shape=circle];\n");
+            nodoAnterior = nodoActual;
         }
-
-        dotFileContent.append("    s1 -> s1 [label=\"a-z, A-Z\"];\n");
+        dotFileContent.append("    ").append(nodoAnterior).append(" [shape=doublecircle];\n"); // Nodo final como doble círculo
         dotFileContent.append("}\n");
 
         try {
@@ -84,6 +83,5 @@ public class automataIdentificador {
             frame.setVisible(true);
         });
     }
-
-
 }
+

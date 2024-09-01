@@ -90,7 +90,7 @@ public class generadorAritmeticos {
             }
         }
         
-        return Color.WHITE; // Color por defecto para cadenas inválidas
+        return Color.WHITE; 
     }
 
     public boolean esSuma(char c) {

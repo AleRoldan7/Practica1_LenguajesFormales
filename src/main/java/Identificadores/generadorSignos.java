@@ -18,7 +18,7 @@ public class generadorSignos {
     private Color coloComa = new Color(0xB79ADB);
     private Color coloPunto = new Color(0x9ADBA6);
     
-    private String paren [] = {"()", "( )"};
+    private String paren [] = {"(", ")"};
     private String llaves [] = {"{}"};
     private String corche [] = {"[]"};
     private char coma [] = {','};
