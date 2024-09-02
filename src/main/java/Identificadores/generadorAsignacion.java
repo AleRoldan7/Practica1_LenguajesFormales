@@ -6,7 +6,7 @@ public class generadorAsignacion {
     
     // Colores para los operadores de asignación
     Color simpleColor = new Color(0x41D9D4);
-    Color compuestaColor = new Color(0xB3B3B3);
+    Color compuestaColor = new Color(0xFFFFFF);
     
     char asSimple[] = {'='};
     String asCompuesta[] = {"+=", "-=", "*=", "/="};

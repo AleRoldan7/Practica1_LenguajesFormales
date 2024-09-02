@@ -19,8 +19,8 @@ public class generadorSignos {
     private Color coloPunto = new Color(0x9ADBA6);
     
     private String paren [] = {"(", ")"};
-    private String llaves [] = {"{}"};
-    private String corche [] = {"[]"};
+    private String llaves [] = {"{","}"};
+    private String corche [] = {"[","]"};
     private char coma [] = {','};
     private char punto [] = {'.'};
     

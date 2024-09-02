@@ -24,13 +24,13 @@ public class generadorAritmeticos {
             return "Cadena inválida: La cadena está vacía.";
         }
 
-        // Validar si la cadena corresponde a un operador de comparación válido
+        
         if (!esSuma(cadena.charAt(0)) && !esResta(cadena.charAt(0)) && !esExpo(cadena.charAt(0)) && !esDivision(cadena.charAt(0)) &&
             !esMod(cadena) && !esMulti(cadena.charAt(0))) {
             return "Cadena inválida: La cadena no es un operador de comparación válido.";
         }
 
-        // Verificar que la cadena no tenga operadores duplicados consecutivos
+        
         if (cadena.length() > 1) {
             char primerCaracter = cadena.charAt(0);
             char segundoCaracter = cadena.charAt(1);
@@ -39,7 +39,7 @@ public class generadorAritmeticos {
             }
         }
 
-        // Verificar caracteres válidos en el resto de la cadena
+        
         for (int i = 1; i < cadena.length(); i++) {
             char c = cadena.charAt(i);
             if (!esSuma(c) && !esResta(c) && !esExpo(c) && !esDivision(c) && !esMod(cadena) && !esMulti(c)) {

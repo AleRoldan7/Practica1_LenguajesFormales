@@ -1,6 +1,5 @@
 package Interfaz;
 
-import Automata.automataIdentificador;
 import Automata.celdaToken;
 import Identificadores.generadorAritmeticos;
 import Identificadores.generadorAsignacion;
@@ -15,29 +14,21 @@ import Identificadores.identificadorEspecial;
 import ListaTokens.ListaTokens;
 import Reportes.reportePanel;
 import Reportes.reporteTokens;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -45,7 +36,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
@@ -249,11 +239,11 @@ public class cuadriculaInicio extends JFrame {
             String token = tokenIndex < tokens.length ? tokens[tokenIndex] : null;
             Color color = (token != null) ? obtenerColorParaToken(token) : Color.WHITE;
 
-            // Ajustar los cálculos para obtener la fila y columna en la cuadrícula
+           
             int filaTexto = obtenerFilaTexto(token);
             int columnaTexto = obtenerColumnaTexto(token);
 
-            // Convertir la fila y columna del texto a las coordenadas de la cuadrícula
+            
             int gridFila = (tokenIndex / tamaGrid);
             int gridColumna = (tokenIndex % tamaGrid);
 
@@ -269,10 +259,10 @@ public class cuadriculaInicio extends JFrame {
 
 
 
-    // Implementar el método obtenerColorParaToken() para determinar el color del token
+   
     private Color obtenerColorParaToken(String token) {
         if (especialToken(token)) {
-            return Color.decode(getColorHexFromToken(token)); // Usar el color extraído del token especial
+            return Color.decode(getColorHexFromToken(token)); 
         }
         if (esComparacion(token)) return geneComparacion.colorComparacion(token);
         if (esAsignacion(token)) return geneAsignacion.colorAsignacion(token);
@@ -285,12 +275,7 @@ public class cuadriculaInicio extends JFrame {
         else{
             return geneIdentificadores.obtenerColorParaCadena(token);
         }
-        /*
-        else{
-            
- 
-        }
-        */
+       
        
     }
 
@@ -302,10 +287,10 @@ public class cuadriculaInicio extends JFrame {
         int index = textoEscrito.indexOf(token);
 
         if (index == -1) {
-            return -1; // Token no encontrado
+            return -1; 
         }
 
-        // Contar el número de saltos de línea antes del índice del token
+       
         int fila = 1;
         for (int i = 0; i < index; i++) {
             if (textoEscrito.charAt(i) == ' ') {
@@ -322,14 +307,14 @@ public class cuadriculaInicio extends JFrame {
         int index = textoEscrito.indexOf(token);
 
         if (index == -1) {
-            return -1; // Token no encontrado
+            return -1; 
         }
 
-        // Buscar el último salto de línea antes del índice del token
+        
         int lastNewLineIndex = textoEscrito.lastIndexOf(' ', index);
         int columna = index - lastNewLineIndex;
 
-        return columna + 1; // La columna es 1-based
+        return columna + 1; 
     }
 
 
@@ -404,7 +389,7 @@ public class cuadriculaInicio extends JFrame {
         int tamaCadena = texto.length();
         List<String> tokens = new ArrayList<>();
         StringBuilder tokenBuilder = new StringBuilder();
-        boolean dentroDeNumero = false;  // Bandera para controlar cuando estamos dentro de un número
+        boolean dentroDeNumero = false;  // Para saber que viene un numero
 
         for (int i = 0; i < tamaCadena; i++) {
             char c = texto.charAt(i);
@@ -415,19 +400,24 @@ public class cuadriculaInicio extends JFrame {
                     tokenBuilder.setLength(0);
                     dentroDeNumero = false;
                 }
-            } else if (esDelimitador(c)) {
+            } else if (limitaToken(c)) {
                 if (tokenBuilder.length() > 0) {
                     tokens.add(tokenBuilder.toString());
                     tokenBuilder.setLength(0);
                     dentroDeNumero = false;
                 }
-                if (c == '.' && dentroDeNumero && i + 1 < tamaCadena && Character.isDigit(texto.charAt(i + 1))) {
+
+               
+                if (i + 1 < tamaCadena && tokenDoble(c, texto.charAt(i + 1))) {
+                    tokens.add("" + c + texto.charAt(i + 1));
+                    i++;  
+                } else if (c == '.' && dentroDeNumero && i + 1 < tamaCadena && Character.isDigit(texto.charAt(i + 1))) {
                     tokenBuilder.append(c);
                 } else {
                     tokens.add(String.valueOf(c));
                 }
             } else {
-                // Detectar inicio de token especial
+                
                 if (esInicioTokenEspecial(texto, i)) {
                     int finTokenEspecial = encontrarFinTokenEspecial(texto, i);
                     tokens.add(texto.substring(i, finTokenEspecial + 1));
@@ -439,7 +429,7 @@ public class cuadriculaInicio extends JFrame {
                         dentroDeNumero = true;
                     }
 
-                    if (i + 1 >= tamaCadena || esDelimitador(texto.charAt(i + 1)) || Character.isWhitespace(texto.charAt(i + 1))) {
+                    if (i + 1 >= tamaCadena || limitaToken(texto.charAt(i + 1)) || Character.isWhitespace(texto.charAt(i + 1))) {
                         tokens.add(tokenBuilder.toString());
                         tokenBuilder.setLength(0);
                         dentroDeNumero = false;
@@ -455,6 +445,13 @@ public class cuadriculaInicio extends JFrame {
         return tokens.toArray(new String[0]);
     }
 
+    
+    private boolean tokenDoble(char c1, char c2) {
+        String op = "" + c1 + c2;
+        return op.equals("<>") || op.equals("==") || op.equals("*=") || op.equals("-=") || 
+               op.equals("+=") || op.equals("/=") || op.equals("<=") || op.equals(">=");
+    }
+
     private boolean esInicioTokenEspecial(String texto, int index) {
         String tokenEspecial = "Square.Color(";
         int longitud = tokenEspecial.length();
@@ -465,16 +462,16 @@ public class cuadriculaInicio extends JFrame {
     }
 
     private int encontrarFinTokenEspecial(String texto, int index) {
-        // Buscar el final del token especial, suponiendo que siempre termina con ')'
+        
         for (int i = index; i < texto.length(); i++) {
             if (texto.charAt(i) == ')') {
                 return i;
             }
         }
-        return texto.length() - 1;  // Si no se encuentra, regresar el final del texto
+        return texto.length() - 1;  
     }
 
-    private boolean esDelimitador(char c) {
+    private boolean limitaToken(char c) {
         return !(Character.isLetter(c) || Character.isDigit(c) || c == '_') 
                && (esSigno(String.valueOf(c)) || esAritmetico(String.valueOf(c))
                || esComparacion(String.valueOf(c)) || esLogico(String.valueOf(c)) || esAsignacion(String.valueOf(c)))
