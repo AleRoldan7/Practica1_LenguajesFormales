@@ -1,5 +1,6 @@
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Reportes/reporteTokens.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/ListaTokens/SepararTokens.java
+/home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Identificadores/identificadorEspecialPosi.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Automata/Automata.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Automata/celdaToken.java
 /home/alejandro/Documentos/Lenguajes Formales/Practica1AnalizadorLexico/src/main/java/Interfaz/cuadriculaInicio.java

@@ -22,6 +22,7 @@ Identificadores/generadorPalabrasReservadas.class
 Identificadores/generadorIdentificadores.class
 Interfaz/cuadriculaInicio$1.class
 Identificadores/generadorTiposDato.class
+Identificadores/identificadorEspecialPosi.class
 Identificadores/generadorComentario.class
 ListaTokens/SepararTokens.class
 Interfaz/cuadriculaInicio$tamaPanel.class

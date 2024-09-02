@@ -25,11 +25,11 @@ public class automataIdentificador {
     private cuadriculaInicio cuInicio;
 
     public void generarAuto(String token, String tipoToken) {
-        // Crear la representación DOT en función del token
+       
         StringBuilder dotFileContent = new StringBuilder();
         dotFileContent.append("digraph DFA {\n");
         dotFileContent.append("    label=\"Tipo de Token: ").append(tipoToken).append("\";\n");
-        dotFileContent.append("    labelloc=\"t\";\n"); // Posición del título en la parte superior
+        dotFileContent.append("    labelloc=\"t\";\n"); 
         dotFileContent.append("    start [shape=point];\n");
 
         String nodoAnterior = "start";
@@ -40,24 +40,24 @@ public class automataIdentificador {
             dotFileContent.append("    ").append(nodoActual).append(" [shape=circle];\n");
             nodoAnterior = nodoActual;
         }
-        dotFileContent.append("    ").append(nodoAnterior).append(" [shape=doublecircle];\n"); // Nodo final como doble círculo
+        dotFileContent.append("    ").append(nodoAnterior).append(" [shape=doublecircle];\n"); 
         dotFileContent.append("}\n");
 
         try {
-            // Escribir el archivo DOT
+           
             File dotFile = new File("diagram.dot");
             FileWriter writer = new FileWriter(dotFile);
             writer.write(dotFileContent.toString());
             writer.close();
 
-            // Ejecutar Graphviz para generar una imagen PNG
+            
             ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", "diagram.dot", "-o", "diagram.png");
             Process process = pb.start();
             process.waitFor();
 
             System.out.println("Diagrama generado como diagram.png");
 
-            // Mostrar la imagen en una ventana emergente
+           
             mostrarImagen("diagram.png");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

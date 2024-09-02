@@ -32,26 +32,26 @@ public class Automata {
         this.token = token;
     }
 
-    // Método para graficar el autómata usando Graphviz
+    
     public void graficarAutomata() {
         try {
             System.out.println("Iniciando la generación del autómata para el token: " + token.getToken());
 
-            // Crear el archivo .dot que se usará para generar el gráfico con Graphviz
+           
             FileWriter fileWriter = new FileWriter("automata.dot");
 
-            // Generar el código .dot para representar el autómata del token
+            
             fileWriter.write("digraph G {\n");
             fileWriter.write("rankdir=LR;\n");
             fileWriter.write("node [shape=circle];\n");
 
-            // Crear un nodo por cada carácter del lexema
+            
             String lexema = token.getToken();
             for (int i = 0; i < lexema.length(); i++) {
                 String nodoActual = "q" + i;
                 String nodoSiguiente = "q" + (i + 1);
 
-                // Último nodo se convertirá en un nodo final
+               
                 fileWriter.write(nodoActual + " -> " + nodoSiguiente + " [label=\"" + lexema.charAt(i) + "\"];\n");
                 if (i == lexema.length() - 1) {
                     fileWriter.write(nodoSiguiente + " [shape=doublecircle];\n");
@@ -62,10 +62,10 @@ public class Automata {
             fileWriter.close();
             System.out.println("Archivo .dot creado correctamente.");
 
-            // Ejecutar el comando de Graphviz para generar el gráfico en formato PNG
+            
             Process proceso = Runtime.getRuntime().exec("dot -Tpng automata.dot -o automata.png");
 
-            // Esperar a que el proceso termine para asegurar que el archivo esté listo
+            
             int exitCode = proceso.waitFor();
             if (exitCode == 0) {
                 System.out.println("Imagen del autómata generada como automata.png");
@@ -78,7 +78,7 @@ public class Automata {
         }
     }
 
-    // Mostrar la información del token en una ventana
+    
     public void mostrarInformacion() {
         JFrame ventana = new JFrame("Información del Token");
         ventana.setSize(400, 300);
@@ -89,7 +89,7 @@ public class Automata {
         
         infoToken.setEditable(false);
 
-        // Botón para graficar el autómata
+        
         JButton botonGraficar = new JButton("Mostrar Autómata");
         botonGraficar.addActionListener(e -> {
             graficarAutomata();
@@ -106,12 +106,12 @@ public class Automata {
     }
 
    
-    // Método para mostrar el autómata generado
+    
     private void mostrarImagenAutomata() throws IOException {
         File archivoImagen = new File("automata.png");
 
         if (archivoImagen.exists()) {
-            // Cargar la imagen generada por Graphviz
+           
             BufferedImage imagen = ImageIO.read(archivoImagen);
             ImageIcon iconoImagen = new ImageIcon(imagen);
             JFrame ventanaAutomata = new JFrame("Autómata");
@@ -121,7 +121,7 @@ public class Automata {
             ventanaAutomata.add(etiquetaImagen);
             ventanaAutomata.setVisible(true);
                 } else {
-                    // Mostrar un mensaje de error si la imagen no fue generada
+                    
                     JOptionPane.showMessageDialog(null, "Error: no se pudo generar el autómata.");
                 }
     }
