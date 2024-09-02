@@ -2,6 +2,7 @@ ListaTokens/NodoTokens.class
 Automata/automataAritmetico.class
 Reportes/reporteTokens.class
 ListaTokens/ListaTokens.class
+Interfaz/cuadriculaInicio$GuardarImagenPanel.class
 Automata/automataIdentificador.class
 Identificadores/generadorSignos.class
 Automata/celdaToken.class

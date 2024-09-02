@@ -32,20 +32,20 @@ public class reportePanel {
 
         JTable table = new JTable(data, columnNames);
 
-        // Ajustar el ancho de las columnas
+        
         table.getColumnModel().getColumn(0).setPreferredWidth(150); // Token
         table.getColumnModel().getColumn(1).setPreferredWidth(150); // Lexema
         table.getColumnModel().getColumn(2).setPreferredWidth(50);  // Línea
         table.getColumnModel().getColumn(3).setPreferredWidth(50);  // Columna
         table.getColumnModel().getColumn(4).setPreferredWidth(400); // Cuadro
 
-        // Ajustar la altura de las filas
-        table.setRowHeight(30); // Ajustar la altura de todas las filas
+        
+        table.setRowHeight(30); 
 
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Ajustar el tamaño del cuadro general
-        scrollPane.setPreferredSize(new Dimension(800, 400)); // Ajustar el tamaño del JScrollPane
+        
+        scrollPane.setPreferredSize(new Dimension(800, 400)); 
 
         JOptionPane.showMessageDialog(frameToken, scrollPane, "Reporte de Tokens", JOptionPane.INFORMATION_MESSAGE);
     }

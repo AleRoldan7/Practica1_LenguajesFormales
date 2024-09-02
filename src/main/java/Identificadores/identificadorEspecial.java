@@ -4,7 +4,9 @@
  */
 package Identificadores;
 
+import Interfaz.cuadriculaInicio;
 import java.awt.Color;
+import java.util.List;
 
 /**
  *
@@ -12,25 +14,51 @@ import java.awt.Color;
  */
 public class identificadorEspecial {
     
-    private String tEspecial [] = {"Square.Color"};
-    private char numeral [] = {'#'};
-            
-            
-    public String validarCadena(String cadena) {
-        if (cadena == null || cadena.isEmpty()) {
-            return "Cadena inválida: La cadena está vacía.";
+    public  boolean esTokenEspecial(String token) {
+        // Definir el prefijo a comparar
+        String prefijo = "Square.Color(";
+        
+        // Verificar que la longitud del token sea suficiente
+        if (token.length() <= prefijo.length()) {
+            return false;
         }
 
+        // Verificar manualmente el prefijo comparando carácter por carácter
+        for (int i = 0; i < prefijo.length(); i++) {
+            if (token.charAt(i) != prefijo.charAt(i)) {
+                return false;
+            }
+        }
+        
+        // Verificar manualmente el sufijo
+        if (token.charAt(token.length() - 1) != ')') {
+            return false;
+        }
+        
+        // Extraer la parte dentro de los paréntesis
+        String contenido = token.substring(prefijo.length(), token.length() - 1);
 
-        return "Cadena válida: " + cadena;
+        // Verificar que el contenido tenga el formato correcto
+        if (contenido.length() == 7 && contenido.charAt(0) == '#') {
+            String hexCode = contenido.substring(1);
+            return esCodigoHexadecimalValido(hexCode);
+        }
+
+        return false;
     }
-    
-    
-    public void agregarColor(String color){
+
+    private static boolean esCodigoHexadecimalValido(String hexCode) {
+        if (hexCode.length() != 6) {
+            return false;
+        }
         
+        for (char c : hexCode.toCharArray()) {
+            if (!Character.isDigit(c) && !(c >= 'A' && c <= 'F') && !(c >= 'a' && c <= 'f')) {
+                return false;
+            }
+        }
         
-        
+        return true;
     }
-    
     
 }

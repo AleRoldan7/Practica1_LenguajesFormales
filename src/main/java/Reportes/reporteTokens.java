@@ -22,13 +22,15 @@ public class reporteTokens {
 
     public reporteTokens(String tipoToken, String lexeme, int fila, int columna, int filaGRid, int columnaGrid, Color color) {
         this.tipoToken = tipoToken;
-        this.lexeme = lexeme;
+        this.lexeme = lexeme;      
         this.fila = fila;
         this.columna = columna;
         this.filaGRid = filaGRid;
         this.columnaGrid = columnaGrid;
         this.color = color;
     }
+
+    // Getters y setters (omitiendo para brevedad)
 
     public String getTipoToken() {
         return tipoToken;
@@ -84,6 +86,16 @@ public class reporteTokens {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        String hexColor = String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+        return "Tipo de Token: " + tipoToken +
+               ", Lexema: " + lexeme +
+               ", Posición en texto: (Fila: " + fila + ", Columna: " + columna + ")" +
+               ", Posición en cuadrícula: (Fila: " + filaGRid + ", Columna: " + columnaGrid + ")" +
+               ", Color: " + hexColor;
     }
 
     

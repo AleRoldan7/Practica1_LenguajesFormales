@@ -19,11 +19,13 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -33,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -64,7 +67,7 @@ public class cuadriculaInicio extends JFrame {
     private JPanel panel;
     private int tamaGrid;
     private JLabel estadoCursor;
-    
+    private identificadorEspecial ideEspecial = new identificadorEspecial();
     
     
     
@@ -90,6 +93,10 @@ public class cuadriculaInicio extends JFrame {
         JButton mostrarTokensButton = new JButton("Mostrar Tokens");
         mostrarTokensButton.addActionListener(new MostrarTokensPanel());
         topPanel.add(mostrarTokensButton);
+        
+        JButton guardarImagen = new JButton("Guardar Imagen");
+        guardarImagen.addActionListener(new GuardarImagenPanel());
+        topPanel.add(guardarImagen);
         
         add(topPanel, BorderLayout.NORTH);
         
@@ -176,31 +183,33 @@ public class cuadriculaInicio extends JFrame {
             String[] tokens = separarTokens(textoEscrito);
             List<reporteTokens> tokenReports = new ArrayList<>();
 
-            int line = 1; // Supongamos que tienes un método para obtener la línea actual
-            int column = 1; // Similar para la columna
+            int line = obtenerFilaTexto(textoEscrito); 
+            int column = obtenerColumnaTexto(textoEscrito); 
 
             for (String token : tokens) {
                 String tipo = identificarTipoToken(token);
-                // Asumiendo que tienes métodos para obtener la posición en la cuadrícula y el color
-                int gridRow = obtenerFilaTexto(token);
+                
+                int gridFila = obtenerFilaTexto(token);
                 int gridColumn = obtenerColumnaTexto(token);
                 Color color = obtenerColorParaToken(tipo);
 
-                // Crear un TokenReport y añadirlo a la lista
-                reporteTokens report = new reporteTokens(tipo, token, line, column, gridRow, gridColumn, color);
+                
+                reporteTokens report = new reporteTokens(tipo, token, line, column, gridFila, gridColumn, color);
                 tokenReports.add(report);
 
-                // Actualizar columna/línea para el siguiente token (esto depende de tu lógica)
+                
                 line++;
                 column++;
             }
 
-            // Mostrar el reporte usando la clase TokenReportViewer
+            
             reportePanel.showReport(tokenReports, ((JFrame) SwingUtilities.getWindowAncestor(texto)));
         }
 
         private String identificarTipoToken(String token) {
-            if (esComparacion(token)) {
+            if(especialToken(token)){
+                return "Token_Especial";
+            } else if (esComparacion(token)) {
                 return "Comparación";
             } else if (esAsignacion(token)) {
                 return "Asignación";
@@ -209,7 +218,7 @@ public class cuadriculaInicio extends JFrame {
             } else if (esAritmetico(token)) {
                 return "Aritmético";
             } else if (esReservada(token)) {
-                return "Palabra Reservada";
+                return "Palabra_Reservada";
             } else if (esTipoDato(token)) {
                 return "Tipo de Dato";
             } else if (esSigno(token)) {
@@ -219,6 +228,7 @@ public class cuadriculaInicio extends JFrame {
             } else {
                 return "Identificador";
             }   
+            
         }
         
         
@@ -239,8 +249,16 @@ public class cuadriculaInicio extends JFrame {
             String token = tokenIndex < tokens.length ? tokens[tokenIndex] : null;
             Color color = (token != null) ? obtenerColorParaToken(token) : Color.WHITE;
 
-            celdaToken celda = new celdaToken(token, color, obtenerFilaTexto(token), obtenerColumnaTexto(token), i / tamaGrid, i % tamaGrid);
-            
+            // Ajustar los cálculos para obtener la fila y columna en la cuadrícula
+            int filaTexto = obtenerFilaTexto(token);
+            int columnaTexto = obtenerColumnaTexto(token);
+
+            // Convertir la fila y columna del texto a las coordenadas de la cuadrícula
+            int gridFila = (tokenIndex / tamaGrid);
+            int gridColumna = (tokenIndex % tamaGrid);
+
+            celdaToken celda = new celdaToken(token, color, filaTexto, columnaTexto, gridFila, gridColumna);
+
             panel.add(celda);
             tokenIndex++;
         }
@@ -249,8 +267,13 @@ public class cuadriculaInicio extends JFrame {
         panel.repaint();
     }
 
+
+
     // Implementar el método obtenerColorParaToken() para determinar el color del token
     private Color obtenerColorParaToken(String token) {
+        if (especialToken(token)) {
+            return Color.decode(getColorHexFromToken(token)); // Usar el color extraído del token especial
+        }
         if (esComparacion(token)) return geneComparacion.colorComparacion(token);
         if (esAsignacion(token)) return geneAsignacion.colorAsignacion(token);
         if (esLogico(token)) return geneLogico.colorLogico(token);
@@ -264,7 +287,7 @@ public class cuadriculaInicio extends JFrame {
         }
         /*
         else{
-            JOptionPane.showMessageDialog(cuadriculaInicio.this, "Token no valido", "Error", JOptionPane.ERROR_MESSAGE);
+            
  
         }
         */
@@ -273,14 +296,44 @@ public class cuadriculaInicio extends JFrame {
 
    
     private int obtenerFilaTexto(String token) {
-        
-        return 1;
+        if (token == null) return -1;
+
+        String textoEscrito = texto.getText();
+        int index = textoEscrito.indexOf(token);
+
+        if (index == -1) {
+            return -1; // Token no encontrado
+        }
+
+        // Contar el número de saltos de línea antes del índice del token
+        int fila = 1;
+        for (int i = 0; i < index; i++) {
+            if (textoEscrito.charAt(i) == ' ') {
+                fila++;
+            }
+        }
+        return fila;
     }
 
     private int obtenerColumnaTexto(String token) {
-        
-        return 1;
+        if (token == null) return -1;
+
+        String textoEscrito = texto.getText();
+        int index = textoEscrito.indexOf(token);
+
+        if (index == -1) {
+            return -1; // Token no encontrado
+        }
+
+        // Buscar el último salto de línea antes del índice del token
+        int lastNewLineIndex = textoEscrito.lastIndexOf(' ', index);
+        int columna = index - lastNewLineIndex;
+
+        return columna + 1; // La columna es 1-based
     }
+
+
+
 
 
 
@@ -337,11 +390,16 @@ public class cuadriculaInicio extends JFrame {
         return geneComentario.esComentario(token);
     }
     
+    private boolean especialToken(String token){
+        return ideEspecial.esTokenEspecial(token);
+    }
+    
+    private String getColorHexFromToken(String token) {
+        String contenido = token.substring("Square.Color(".length(), token.length() - 1);
+        return contenido; 
+    }
     
     
-    
-    
-    /*
     public String[] separarTokens(String texto) {
         int tamaCadena = texto.length();
         List<String> tokens = new ArrayList<>();
@@ -352,47 +410,44 @@ public class cuadriculaInicio extends JFrame {
             char c = texto.charAt(i);
 
             if (Character.isWhitespace(c)) {
-                // Cuando se encuentra un espacio, agregar el token si existe
                 if (tokenBuilder.length() > 0) {
                     tokens.add(tokenBuilder.toString());
                     tokenBuilder.setLength(0);
                     dentroDeNumero = false;
                 }
             } else if (esDelimitador(c)) {
-                // Agregar el token acumulado antes del delimitador
                 if (tokenBuilder.length() > 0) {
                     tokens.add(tokenBuilder.toString());
                     tokenBuilder.setLength(0);
                     dentroDeNumero = false;
                 }
-                // Verificar si es un punto y si estamos en un número
                 if (c == '.' && dentroDeNumero && i + 1 < tamaCadena && Character.isDigit(texto.charAt(i + 1))) {
-                    // Si es un punto decimal y hay un dígito después, continuar acumulando el número
                     tokenBuilder.append(c);
                 } else {
-                    // Agregar el delimitador como token
                     tokens.add(String.valueOf(c));
                 }
             } else {
-                // Acumular caracteres para un token, puede ser parte de un identificador o número
-                tokenBuilder.append(c);
+                // Detectar inicio de token especial
+                if (esInicioTokenEspecial(texto, i)) {
+                    int finTokenEspecial = encontrarFinTokenEspecial(texto, i);
+                    tokens.add(texto.substring(i, finTokenEspecial + 1));
+                    i = finTokenEspecial;
+                } else {
+                    tokenBuilder.append(c);
 
-                // Verificar si estamos construyendo un número
-                if (Character.isDigit(c) || (c == '.' && dentroDeNumero)) {
-                    dentroDeNumero = true; // Estamos dentro de un número
-                }
+                    if (Character.isDigit(c) || (c == '.' && dentroDeNumero)) {
+                        dentroDeNumero = true;
+                    }
 
-                // Verificar si el siguiente carácter no es parte de un número o identificador
-                if (i + 1 >= tamaCadena || esDelimitador(texto.charAt(i + 1)) || Character.isWhitespace(texto.charAt(i + 1))) {
-                    // Agregar el token acumulado hasta ahora
-                    tokens.add(tokenBuilder.toString());
-                    tokenBuilder.setLength(0);
-                    dentroDeNumero = false;  // Reiniciar bandera después de completar un token
+                    if (i + 1 >= tamaCadena || esDelimitador(texto.charAt(i + 1)) || Character.isWhitespace(texto.charAt(i + 1))) {
+                        tokens.add(tokenBuilder.toString());
+                        tokenBuilder.setLength(0);
+                        dentroDeNumero = false;
+                    }
                 }
             }
         }
 
-        // Añadir el último token si existe
         if (tokenBuilder.length() > 0) {
             tokens.add(tokenBuilder.toString());
         }
@@ -400,20 +455,37 @@ public class cuadriculaInicio extends JFrame {
         return tokens.toArray(new String[0]);
     }
 
+    private boolean esInicioTokenEspecial(String texto, int index) {
+        String tokenEspecial = "Square.Color(";
+        int longitud = tokenEspecial.length();
+        if (index + longitud <= texto.length()) {
+            return texto.substring(index, index + longitud).equals(tokenEspecial);
+        }
+        return false;
+    }
+
+    private int encontrarFinTokenEspecial(String texto, int index) {
+        // Buscar el final del token especial, suponiendo que siempre termina con ')'
+        for (int i = index; i < texto.length(); i++) {
+            if (texto.charAt(i) == ')') {
+                return i;
+            }
+        }
+        return texto.length() - 1;  // Si no se encuentra, regresar el final del texto
+    }
+
     private boolean esDelimitador(char c) {
-        // Ajustar esta lógica para que los delimitadores sean los que definas como tales
         return !(Character.isLetter(c) || Character.isDigit(c) || c == '_') 
                && (esSigno(String.valueOf(c)) || esAritmetico(String.valueOf(c))
                || esComparacion(String.valueOf(c)) || esLogico(String.valueOf(c)) || esAsignacion(String.valueOf(c)))
-               && c != '.';  // Excluir el punto como delimitador, lo manejaremos manualmente
+               && c != '.';
     }
-    */
 
     
     
     
     
-    
+    /*
     public String[] separarTokens(String texto) {
         int tamaCadena = texto.length();
         List<String> tokens = new ArrayList<>();
@@ -442,6 +514,48 @@ public class cuadriculaInicio extends JFrame {
 
         return tokens.toArray(new String[0]);
     }
-    
+    */
+    private class GuardarImagenPanel implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            BufferedImage image = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = image.createGraphics();
+            panel.paint(g2d);
+            g2d.dispose();
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar Imagen");
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imagenes JPG y PNG", "jpg", "png"));
+
+            int sleccion = fileChooser.showSaveDialog(cuadriculaInicio.this);
+            if (sleccion == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                String filePath = fileToSave.getPath();
+
+                
+                String extension = extensionImagen(filePath);
+                String formatName = "jpg"; 
+                if (extension.equals("png")) {
+                    formatName = "png";
+                }
+
+                try {
+                    ImageIO.write(image, formatName, fileToSave);
+                    JOptionPane.showMessageDialog(cuadriculaInicio.this, "Imagen guardada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(cuadriculaInicio.this, "Error al guardar la imagen", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        private String extensionImagen(String filePath) {
+            String fileName = new File(filePath).getName();
+            int dotIndex = fileName.lastIndexOf('.');
+            if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+                return fileName.substring(dotIndex + 1).toLowerCase();
+            }
+            return "";
+        }
+    }
 
 }
